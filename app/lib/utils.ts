@@ -1,5 +1,49 @@
 import { Revenue } from './definitions';
 
+export class NumMatrix {
+  private pefMatrix: number[][] = [];
+  
+  constructor(matrix: number[][]) {
+    for (let i = 1; i < matrix.length + 1; i++) {
+      // if (i === 1) {
+      //   this.pefMatrix[i - 1] = [];
+      //   this.pefMatrix[i] = [];
+      // } else {
+      //   this.pefMatrix[i] = [];
+      // }
+      if (typeof this.pefMatrix[i - 1] === 'undefined') {
+        this.pefMatrix[i - 1] = [];
+      }
+
+      if (typeof this.pefMatrix[i] === 'undefined') {
+        this.pefMatrix[i] = [];
+      }
+
+      for (let j = 1; j < matrix[0].length + 1; j++) {
+        if (i === 1) {
+          this.pefMatrix[i - 1][j] = 0;
+          this.pefMatrix[i - 1][j - 1] = 0
+        }
+
+        if (j === 1) {
+          this.pefMatrix[i][j - 1] = 0
+        }
+
+        console.log("🚀 ~ NumMatrix ~ constructor ~ this.pefMatrix[i - 1][j]:", this.pefMatrix[i - 1][j])
+        const top = this.pefMatrix[i - 1][j];
+        const left = this.pefMatrix[i][j - 1];
+        const diagonal = this.pefMatrix[i - 1][j - 1];
+        this.pefMatrix[i][j] = matrix[i - 1][j - 1] + top + left - diagonal;
+        console.log("🚀 ~ NumMatrix ~ constructor ~ this.pefMatrix:", this.pefMatrix)
+      }
+    }
+  }
+
+  sumRegion(row1: number, col1: number, row2: number, col2: number): number {
+      return this.pefMatrix[row2 + 1][col2 + 1] - this.pefMatrix[row1][col2 + 1] - this.pefMatrix[row2 + 1][col1] + this.pefMatrix[row1][col1];
+  }
+}
+
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
     style: 'currency',
